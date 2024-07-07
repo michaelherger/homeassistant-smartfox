@@ -2,6 +2,8 @@
 
 Some random notes about findings in the [Smartfox](https://smartfox.at) web API, and how to integrate it into [Home Assistant](https://www.home-assistant.io).
 
+<img alt="Basic Smartfox Information" src="https://github.com/michaelherger/homeassistant-smartfox/blob/main/smartfox-basic.png?raw=true" style="width:501px">
+
 ## Reading values
 
 We can read some live data from the Smartfox on http://smartfox/values.xml:
