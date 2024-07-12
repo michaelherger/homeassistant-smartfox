@@ -1,4 +1,4 @@
-- scan_interval: 10
+- scan_interval: 30
   resource: http://192.168.0.232/values.xml
   sensor:
     # Meta Data
@@ -56,19 +56,49 @@
       device_class: energy
       unit_of_measurement: Wh
       state_class: total_increasing
+    - name: Smartfox Consumption Day
+      unique_id: smartfox.daily.consumption
+      value_template: >
+        {{ 
+        int(value_json["values"].value | selectattr("@id", "eq", "hidWr1EnergyDay") | map(attribute="#text") | first) + 
+        int(value_json["values"].value | selectattr("@id", "eq", "hidWr2EnergyDay") | map(attribute="#text") | first) + 
+        int(value_json["values"].value | selectattr("@id", "eq", "hidWr3EnergyDay") | map(attribute="#text") | first) + 
+        int(value_json["values"].value | selectattr("@id", "eq", "hidWr4EnergyDay") | map(attribute="#text") | first) + 
+        int(value_json["values"].value | selectattr("@id", "eq", "hidWr5EnergyDay") | map(attribute="#text") | first) +
+        int(value_json["values"].value | selectattr("@id", "eq", "hidFromGridEnergyDay") | map(attribute="#text") | first) -
+        int(value_json["values"].value | selectattr("@id", "eq", "hidToGridEnergyDay") | map(attribute="#text") | first)
+        }}
+      device_class: energy
+      unit_of_measurement: Wh
+      state_class: total_increasing
+
+    # Relay
+    - name: Smartfox Relay 1 Name
+      unique_id: smartfox.relay.1.name
+      value_template: '{{ value_json["values"].value | selectattr("@id", "eq", "hidR1Name") | map(attribute="#text") | first }}'
+    - name: Smartfox Relay 2 Name
+      unique_id: smartfox.relay.2.name
+      value_template: '{{ value_json["values"].value | selectattr("@id", "eq", "hidR2Name") | map(attribute="#text") | first }}'
+    - name: Smartfox Relay 3 Name
+      unique_id: smartfox.relay.3.name
+      value_template: '{{ value_json["values"].value | selectattr("@id", "eq", "hidR3Name") | map(attribute="#text") | first }}'
+    - name: Smartfox Relay 4 Name
+      unique_id: smartfox.relay.4.name
+      value_template: '{{ value_json["values"].value | selectattr("@id", "eq", "hidR4Name") | map(attribute="#text") | first }}'
+
 
   binary_sensor:
     # Relay states
     - name: Smartfox Relay 1 Status
       unique_id: smartfox.relay.1.status
-      value_template: '{{ value_json["values"].value | selectattr("@id", "eq", "relayStatusValue1") | map(attribute="#text") | first }}'
+      value_template: '{{ (value_json["values"].value | selectattr("@id", "eq", "relayStatusValue1") | map(attribute="#text") | first) | replace("m", 1) }}'
     - name: Smartfox Relay 2 Status
       unique_id: smartfox.relay.2.status
-      value_template: '{{ value_json["values"].value | selectattr("@id", "eq", "relayStatusValue2") | map(attribute="#text") | first }}'
+      value_template: '{{ (value_json["values"].value | selectattr("@id", "eq", "relayStatusValue2") | map(attribute="#text") | first) | replace("m", 1) }}'
     - name: Smartfox Relay 3 Status
       unique_id: smartfox.relay.3.status
-      value_template: '{{ value_json["values"].value | selectattr("@id", "eq", "relayStatusValue3") | map(attribute="#text") | first }}'
+      value_template: '{{ (value_json["values"].value | selectattr("@id", "eq", "relayStatusValue3") | map(attribute="#text") | first) | replace("m", 1) }}'
     - name: Smartfox Relay 4 Status
       unique_id: smartfox.relay.4.status
-      value_template: '{{ value_json["values"].value | selectattr("@id", "eq", "relayStatusValue4") | map(attribute="#text") | first }}'
+      value_template: '{{ (value_json["values"].value | selectattr("@id", "eq", "relayStatusValue4") | map(attribute="#text") | first) | replace("m", 1) }}'
       
